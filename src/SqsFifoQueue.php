@@ -6,6 +6,8 @@ use Illuminate\Queue\SqsQueue;
 
 class SqsFifoQueue extends SqsQueue
 {
+    static $groupId;
+    
     /**
      * Push a raw payload onto the queue.
      *
@@ -19,7 +21,7 @@ class SqsFifoQueue extends SqsQueue
         $response = $this->sqs->sendMessage([
             'QueueUrl' => $this->getQueue($queue),
             'MessageBody' => $payload,
-            'MessageGroupId' => uniqid(),
+            'MessageGroupId' => self::$groupId ?? uniqid(),
             'MessageDeduplicationId' => uniqid(),
         ]);
 
